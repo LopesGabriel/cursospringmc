@@ -9,10 +9,15 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import com.gabriel.cursomc.domain.Categoria;
 import com.gabriel.cursomc.domain.Cidade;
+import com.gabriel.cursomc.domain.Cliente;
+import com.gabriel.cursomc.domain.Endereco;
 import com.gabriel.cursomc.domain.Estado;
 import com.gabriel.cursomc.domain.Produto;
+import com.gabriel.cursomc.enums.TipoCliente;
 import com.gabriel.cursomc.repositories.CategoriaRepository;
 import com.gabriel.cursomc.repositories.CidadeRepository;
+import com.gabriel.cursomc.repositories.ClienteRepository;
+import com.gabriel.cursomc.repositories.EnderecoRepository;
 import com.gabriel.cursomc.repositories.EstadoRepository;
 import com.gabriel.cursomc.repositories.ProdutoRepository;
 
@@ -23,11 +28,14 @@ public class CursomcApplication implements CommandLineRunner{
 	private CategoriaRepository categoriaRepository;
 	@Autowired
 	private ProdutoRepository produtoRepository;
-	
 	@Autowired
 	private CidadeRepository cidadeRepository;
 	@Autowired
 	private EstadoRepository estadoRepository;
+	@Autowired
+	private ClienteRepository clienteRepository;
+	@Autowired
+	private EnderecoRepository enderecoRepository;
 
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -55,10 +63,12 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		Estado est1 = new Estado(null, "Minas Gerais");
 		Estado est2 = new Estado(null, "São Paulo");
+		Estado est3 = new Estado(null, "Distrito Federal");
 		
 		Cidade cid1 = new Cidade(null, "Uberlândia", est1);
 		Cidade cid2 = new Cidade(null, "São Paulo", est2);
 		Cidade cid3 = new Cidade(null, "Campinas", est2);
+		Cidade cid4 = new Cidade(null, "Brasília", est3);
 		
 		
 		c1.getProdutos().addAll(Arrays.asList(p1, p2, p3, p7, p10));
@@ -83,8 +93,27 @@ public class CursomcApplication implements CommandLineRunner{
 		
 		categoriaRepository.saveAll(Arrays.asList(c1, c2, c3, c4));
 		produtoRepository.saveAll(Arrays.asList(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11));
-		estadoRepository.saveAll(Arrays.asList(est1, est2));
-		cidadeRepository.saveAll(Arrays.asList(cid1, cid2, cid3));
+		estadoRepository.saveAll(Arrays.asList(est1, est2, est3));
+		cidadeRepository.saveAll(Arrays.asList(cid1, cid2, cid3, cid4));
+		
+		Cliente cli1 = new Cliente(null, "Gabriel de Oliveira", "lopesgabriel0199@gmail.com", "059.099.411-51", TipoCliente.PESSOAFISICA);
+		Cliente cli2 = new Cliente(null, "Matheus de Oliveira", "matlopes1999@gmail.com", "059.099.451-51", TipoCliente.PESSOAFISICA);
+		Cliente cli3 = new Cliente(null, "Dona Neide", "donaneide@gmail.com", "FingeCnpj", TipoCliente.PESSOAJURIDICA);
+		
+		cli1.getTelefones().addAll(Arrays.asList("(61) 9 8235-2349", "(61) 9 8103-1618"));
+		cli2.getTelefones().addAll(Arrays.asList("(61) 9 8151-0636", "(61) 9 8103-1617"));
+		cli3.getTelefones().addAll(Arrays.asList("(61) 9 8103-1618", "(61) 9 8103-1617"));
+		
+		Endereco e1 = new Endereco(null, "SHA conjunto 06 Chácara 25", "22", "Portal das Águas", "Águas Claras", "71996-215", cli1, cid4);
+		Endereco e2 = new Endereco(null, "SHA conjunto 06 Chácara 25", "22", "Portal das Águas", "Águas Claras", "71996-215", cli2, cid4);
+		Endereco e3 = new Endereco(null, "SHA conjunto 06 Chácara 25", "22", "Portal das Águas", "Águas Claras", "71996-215", cli3, cid4);
+		
+		cli1.getEnderecos().add(e1);
+		cli2.getEnderecos().add(e2);
+		cli3.getEnderecos().add(e3);
+		
+		clienteRepository.saveAll(Arrays.asList(cli1, cli2, cli3));
+		enderecoRepository.saveAll(Arrays.asList(e1, e2, e3));
 		
 	}
 
